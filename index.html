@@ -3,7 +3,48 @@
 :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e5e7eb;background:#0b1220}body{margin:0;background:radial-gradient(circle at 90% 0%,#143c38 0%,#0b1220 45%)}.panel{background:#141f30;border:1px solid #304155;border-radius:18px;padding:22px}.muted{color:#a6b5c7}.accent{color:#6ee7b7}.field{width:100%;background:#0c1625;border:1px solid #43556b;color:#f8fafc;border-radius:10px;padding:10px 12px;margin-top:6px}input[type=range]{width:100%;accent-color:#34d399;margin-top:12px}.metric{background:#0d1a29;border:1px solid #293e52;border-radius:14px;padding:17px}.btn{border:1px solid #476175;border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;background:#0d1a29;color:#d1dbe6}.btn.active{background:#123b36;border-color:#34d399;color:#a7f3d0}.termination-btn{background:linear-gradient(110deg,#0f766e,#047857);border-color:#34d399;color:#ecfdf5;font-weight:700;box-shadow:0 0 0 1px rgba(52,211,153,.16),0 8px 22px rgba(4,120,87,.22);transition:filter .15s ease,box-shadow .15s ease}.termination-btn:hover{filter:brightness(1.12);box-shadow:0 0 0 1px rgba(110,231,183,.35),0 10px 26px rgba(4,120,87,.3)}.termination-btn:focus-visible{outline:2px solid #a7f3d0;outline-offset:3px}.tablewrap{overflow:auto}.wealth-table th.asbf-col,.wealth-table td:nth-child(4){background:#10312e;color:#a7f3d0}.wealth-table th.ordinary-col,.wealth-table td:nth-child(5){background:#10263a;color:#bfdbfe}.wealth-table th.difference-col,.wealth-table td:nth-child(8){background:#172436;font-weight:700}.wealth-table tbody tr:hover td{filter:brightness(1.2)}dialog.modal{color:#e5e7eb;background:#141f30;border:1px solid #476175;border-radius:18px;padding:24px;max-height:90vh;overflow:auto}dialog.modal::backdrop{background:rgba(2,8,18,.78);backdrop-filter:blur(3px)}table{border-collapse:collapse;width:100%;font-size:14px;white-space:nowrap}td,th{padding:12px;border-bottom:1px solid #304155;text-align:right}td:first-child,th:first-child{text-align:left}th{color:#a6b5c7;font-weight:600}canvas{width:100%;height:280px;display:block}button:focus-visible,input:focus-visible{outline:2px solid #6ee7b7;outline-offset:2px}.note{font-size:12px;color:#a6b5c7;line-height:1.6}
 </style><style>
 :root{color:#16233b;background:#fff}body{color:#16233b;background:#f6f9ff}.panel{background:#fff;border-color:#d7e3f5;box-shadow:0 8px 24px rgba(18,48,105,.055)}.metric{background:#f3f7ff;border-color:#d7e3f5}.muted,.note,th{color:#5d6d85}.accent{color:#193CEB}.field{background:#fff;border-color:#c7d5e8;color:#16233b}input[type=range]{accent-color:#193CEB}.btn{background:#f3f7ff;border-color:#c7d5e8;color:#193CEB}.btn.active{background:#e7efff;border-color:#193CEB;color:#1231bd}.termination-btn{background:linear-gradient(110deg,#193CEB,#1478ed);border-color:#193CEB;color:#fff;box-shadow:0 5px 16px rgba(25,60,235,.22)}.termination-btn:hover{filter:brightness(1.07);box-shadow:0 7px 20px rgba(25,60,235,.3)}.termination-btn:focus-visible,button:focus-visible,input:focus-visible{outline-color:#193CEB}.text-emerald-300{color:#193CEB!important}.text-slate-100{color:#16233b!important}.wealth-table th.asbf-col,.wealth-table td:nth-child(4){background:#e8efff;color:#193CEB}.wealth-table th.ordinary-col,.wealth-table td:nth-child(5){background:#edf6ff;color:#1265c5}.wealth-table th.difference-col,.wealth-table td:nth-child(8){background:#f2f6fc;color:#16233b}.wealth-table tbody tr:hover td{filter:brightness(.98)}dialog.modal{color:#16233b;background:#fff;border-color:#c7d5e8;box-shadow:0 22px 70px rgba(12,33,74,.2)}dialog.modal::backdrop{background:rgba(13,32,67,.48);backdrop-filter:blur(3px)}td,th{border-bottom-color:#e1e9f4}button:focus-visible,input:focus-visible{outline:2px solid #193CEB;outline-offset:2px}
-@media(max-width:640px){main{padding-top:1.25rem!important;padding-bottom:1.5rem!important}.panel{padding:16px;border-radius:16px}h1{font-size:2rem!important;line-height:1.15}.metric{padding:14px}.btn{min-height:46px}.field{font-size:16px;padding:11px 12px}.wealth-table{min-width:850px}.wealth-table th:first-child,.wealth-table td:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:5px 0 8px rgba(22,35,59,.06)}.wealth-table tbody tr:hover td:first-child{background:#f8faff}dialog.modal{width:calc(100% - 1.25rem);max-width:42rem;max-height:92vh;padding:18px;margin:auto}.modal .grid{gap:.6rem}.modal .metric{padding:12px}canvas{height:240px}}
+@media(max-width:640px){
+  body{overflow-x:hidden}
+  main{padding:1rem 12px 1.5rem!important;gap:1rem!important}
+  header{padding:2px 2px 4px}
+  header>div:first-child{align-items:center}
+  header .btn{padding:8px 11px;min-height:40px}
+  h1{font-size:1.9rem!important;line-height:1.12;letter-spacing:-.02em}
+  header p{font-size:.92rem;line-height:1.5;margin-top:.65rem!important}
+  .panel{padding:15px;border-radius:15px;box-shadow:0 5px 18px rgba(18,48,105,.05)}
+  .panel.space-y-5>*+*{margin-top:1rem}
+  h2{font-size:1.08rem!important}
+  .metric{padding:13px;border-radius:13px;min-width:0}
+  .metric .text-3xl{font-size:1.55rem;line-height:1.15;word-break:break-word}
+  .metric .text-2xl{font-size:1.3rem;line-height:1.2;word-break:break-word}
+  .btn{min-height:48px;padding:11px 12px;border-radius:11px}
+  .field{font-size:16px;padding:11px 12px;border-radius:10px}
+  input[type=range]{height:28px;margin-top:8px}
+  label{font-size:.92rem;line-height:1.35}
+  .note{font-size:11.5px;line-height:1.5}
+  .grid.sm\:grid-cols-2{grid-template-columns:1fr}
+  .grid.sm\:col-span-2{grid-column:span 1}
+  #openTermination{font-size:.9rem;text-align:center;padding:12px}
+  #payment{font-size:2rem;line-height:1.1}
+  .tablewrap{margin:0 -3px;padding:0 3px;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin}
+  table{font-size:12px}
+  td,th{padding:9px 10px}
+  .wealth-table{min-width:780px}
+  .wealth-table th:first-child,.wealth-table td:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:5px 0 8px rgba(22,35,59,.06)}
+  .wealth-table thead th:first-child{z-index:3}
+  .wealth-table tbody tr:hover td:first-child{background:#f8faff}
+  .wealth-table th.asbf-col,.wealth-table td:nth-child(4),.wealth-table th.ordinary-col,.wealth-table td:nth-child(5),.wealth-table th.difference-col,.wealth-table td:nth-child(8){font-weight:600}
+  canvas{height:220px}
+  dialog.modal{width:calc(100% - 20px);max-width:none;max-height:90vh;padding:16px;margin:auto;border-radius:15px}
+  .modal .grid{gap:.6rem}
+  .modal .metric{padding:11px}
+  .modal .text-3xl{font-size:1.6rem}
+  #export{width:100%;text-align:center}
+  footer{padding-left:2px;padding-right:2px}
+}
+@media(min-width:641px) and (max-width:900px){
+  main{padding-left:18px!important;padding-right:18px!important}
+}
 </style></head><body><main class="max-w-6xl mx-auto px-4 py-10 space-y-6">
 <header><div class="flex justify-between items-center gap-3"><div class="text-emerald-300 text-sm font-semibold tracking-widest uppercase">DiariDuit · Investment tools</div><button id="language" class="btn" type="button" aria-label="Change language">BM</button></div><h1 class="text-3xl md:text-5xl font-bold mt-2">ASB Financing Calculator</h1><p class="muted mt-3 max-w-3xl">Compare financing against investing the <strong>exact same out-of-pocket payments</strong> into ordinary ASB. See total ROI, annualized CAGR and money-weighted annualized IRR.</p></header>
 <div class="grid lg:grid-cols-5 gap-5"><section class="panel lg:col-span-2 space-y-5"><h2 class="text-xl font-bold">Your assumptions</h2>
