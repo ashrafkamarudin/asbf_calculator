@@ -1,3 +1,5 @@
+export type DividendMode = "reinvest" | "offset";
+
 export type CalculatorInputs = {
   amount: number;
   certificates: number;
@@ -5,6 +7,8 @@ export type CalculatorInputs = {
   asbReturn: number;
   tenure: number;
   fees: number;
+  dividendMode: DividendMode;
+  dividendOffsetShare: number;
 };
 
 export type ProjectionPoint = {
@@ -14,6 +18,7 @@ export type ProjectionPoint = {
   asbfWealth: number;
   ordinaryWealth: number;
   cashInvested: number;
+  monthlyTopUp: number;
   asbfProfit: number;
   ordinaryProfit: number;
   asbfRoi: number | null;
@@ -22,6 +27,8 @@ export type ProjectionPoint = {
   ordinaryCagr: number | null;
   asbfIrr: number | null;
   ordinaryIrr: number | null;
+  dividendApplied: number;
+  dividendsApplied: number;
 };
 
 export type CalculatorResults = {
@@ -100,33 +107,78 @@ export function calculateProjection(inputs: CalculatorInputs): CalculatorResults
   const annualReturn = inputs.asbReturn / 100;
   const monthsInTerm = inputs.tenure * 12;
   const monthlyPayment = paymentFor(principal, monthlyRate, monthsInTerm);
+  const annualInstalment = monthlyPayment * 12;
+  const offsetShare =
+    inputs.dividendMode === "offset"
+      ? Math.max(0, Math.min(100, inputs.dividendOffsetShare)) / 100
+      : 0;
+
+  // The ASB return is read as the annual distribution yield. The share earmarked for the
+  // financing leaves the units at each year end and services the instalments of the year that
+  // follows, so the bank still receives the full instalment and the financing amortises over
+  // its original term rather than being cleared early. The first distribution arrives after
+  // year one, so year one is always paid in full, and whatever the instalments cannot absorb
+  // stays invested inside the units. A zero offset share reproduces the plain reinvestment path.
+  let asbBalance = principal;
+  let dividendsAppliedToDate = 0;
+  let dividendAvailable = 0;
+
+  const asbBalances: number[] = [principal];
+  const dividendAppliedByYear: number[] = [0];
+  const dividendsAppliedByYear: number[] = [0];
+  const cashPaidByYear: number[] = [0];
+
+  for (let year = 1; year <= inputs.tenure; year += 1) {
+    const distribution = asbBalance * annualReturn * offsetShare;
+    // A distribution credited at the end of the final year lands after the last instalment,
+    // so nothing can be serviced with it and it stays invested inside the units.
+    const applied = year < inputs.tenure ? Math.min(distribution, annualInstalment) : 0;
+    const cashPaid = annualInstalment - dividendAvailable;
+
+    asbBalance = asbBalance * (1 + annualReturn) - applied;
+
+    dividendAvailable = applied;
+    dividendsAppliedToDate += applied;
+
+    asbBalances[year] = asbBalance;
+    dividendAppliedByYear[year] = applied;
+    dividendsAppliedByYear[year] = dividendsAppliedToDate;
+    cashPaidByYear[year] = cashPaid;
+  }
+
   const projection: ProjectionPoint[] = [];
   let ordinaryBalance = upfrontFees;
+  let cashPaid = 0;
 
   for (let year = 0; year <= inputs.tenure; year += 1) {
     if (year > 0) {
+      const monthlyTopUp = cashPaidByYear[year] / 12;
       ordinaryBalance *= 1 + annualReturn;
 
       for (let month = 1; month <= 12; month += 1) {
         const fractionOfYear = (12 - month) / 12;
-        ordinaryBalance += monthlyPayment * (1 + annualReturn) ** fractionOfYear;
+        ordinaryBalance += monthlyTopUp * (1 + annualReturn) ** fractionOfYear;
       }
+
+      cashPaid += cashPaidByYear[year];
     }
 
     const monthsPaid = year * 12;
-    const asbBalance = principal * (1 + annualReturn) ** year;
+    const asbBalanceAtYearEnd = asbBalances[year];
     const loanBalance = remainingLoan(principal, monthlyRate, monthlyPayment, monthsPaid);
-    const asbfWealth = asbBalance - loanBalance;
-    const cashInvested = upfrontFees + monthlyPayment * monthsPaid;
+    const asbfWealth = asbBalanceAtYearEnd - loanBalance;
+    const cashInvested = upfrontFees + cashPaid;
     const ordinaryWealth = ordinaryBalance;
+    const averageTopUp = monthsPaid > 0 ? cashPaid / monthsPaid : monthlyPayment;
 
     projection.push({
       year,
-      asbBalance,
+      asbBalance: asbBalanceAtYearEnd,
       loanBalance,
       asbfWealth,
       ordinaryWealth,
       cashInvested,
+      monthlyTopUp: monthsPaid > 0 ? cashPaidByYear[year] / 12 : monthlyPayment,
       asbfProfit: asbfWealth - cashInvested,
       ordinaryProfit: ordinaryWealth - cashInvested,
       asbfRoi: returnOnCash(asbfWealth, cashInvested, year),
@@ -135,16 +187,18 @@ export function calculateProjection(inputs: CalculatorInputs): CalculatorResults
       ordinaryCagr: compoundAnnualized(ordinaryWealth, cashInvested, year),
       asbfIrr: moneyWeightedReturn(
         upfrontFees,
-        monthlyPayment,
+        averageTopUp,
         monthsPaid,
         asbfWealth,
       ),
       ordinaryIrr: moneyWeightedReturn(
         upfrontFees,
-        monthlyPayment,
+        averageTopUp,
         monthsPaid,
         ordinaryWealth,
       ),
+      dividendApplied: dividendAppliedByYear[year],
+      dividendsApplied: dividendsAppliedByYear[year],
     });
   }
 

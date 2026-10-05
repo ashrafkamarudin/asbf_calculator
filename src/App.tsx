@@ -38,11 +38,22 @@ type Copy = {
   years: string;
   upfrontFees: string;
   perCertificateFees: string;
+  dividendField: string;
+  dividendFieldContext: string;
+  dividendReinvest: string;
+  dividendOffset: string;
+  dividendFieldNote: string;
+  offsetShare: string;
+  offsetShareContext: string;
   assumptionsNote: string;
   projection: string;
   monthlyPayment: string;
   perMonth: string;
+  perYear: string;
   acrossCertificates: string;
+  dividendsApplied: string;
+  dividendsAppliedNote: string;
+  topUp: string;
   netWealth: string;
   netWealthNote: string;
   ordinaryAsb: string;
@@ -59,6 +70,8 @@ type Copy = {
   irr: string;
   remainingLoan: string;
   returnNote: string;
+  dividendAppliedYear: string;
+  appliedByThen: string;
   chartTitle: string;
   chartDescription: string;
   selectedYear: string;
@@ -114,11 +127,22 @@ const translations: Record<Language, Copy> = {
     years: "years",
     upfrontFees: "Upfront fees / takaful",
     perCertificateFees: "paid in cash per certificate (RM)",
-    assumptionsNote: "Estimates assume fixed rates, full first-year dividend eligibility, year-end dividends and monthly instalments. Zakat, tax and settlement charges are excluded. Actual ASNB calculations and bank terms may differ.",
+    dividendField: "Annual dividends",
+    dividendFieldContext: "paid out at year end",
+    dividendReinvest: "Reinvest",
+    dividendOffset: "Repay financing",
+    dividendFieldNote: "Dividends compound inside the ASB units unless you use them against the financing.",
+    offsetShare: "Share of dividend used to repay",
+    offsetShareContext: "the rest keeps compounding inside the units",
+    assumptionsNote: "Estimates assume fixed rates, full first-year dividend eligibility, year-end dividends and monthly instalments. Dividends earmarked for the financing service the following year's monthly instalments instead of being reinvested, so the first year is paid entirely from your own cash, the financing keeps its original term, and you only pay the shortfall in later years. Any dividend the instalments cannot absorb stays invested inside the units. Zakat, tax and settlement charges are excluded. Actual ASNB calculations and bank terms may differ.",
     projection: "Projection",
     monthlyPayment: "Monthly financing instalment",
     perMonth: "/ month",
+    perYear: "/ year",
     acrossCertificates: "Combined payment for",
+    dividendsApplied: "Dividends applied to loan",
+    dividendsAppliedNote: "Services instalments, term unchanged",
+    topUp: "You still pay",
     netWealth: "ASBF net wealth",
     netWealthNote: "ASB balance minus remaining loan",
     ordinaryAsb: "Ordinary ASB",
@@ -135,6 +159,8 @@ const translations: Record<Language, Copy> = {
     irr: "Annualized money-weighted IRR",
     remainingLoan: "Remaining loan",
     returnNote: "*CAGR treats total contributions as if invested at the start. IRR accounts for the timing of monthly payments and is generally the more meaningful annualized figure here. At early horizons, net wealth assumes settlement of the modelled balance; settlement charges are excluded.",
+    dividendAppliedYear: "Dividend applied",
+    appliedByThen: "Dividends applied by then",
     chartTitle: "Wealth over time",
     chartDescription: "Estimated net wealth at the end of each year.",
     selectedYear: "Selected year",
@@ -188,11 +214,22 @@ const translations: Record<Language, Copy> = {
     years: "tahun",
     upfrontFees: "Yuran awal / takaful",
     perCertificateFees: "dibayar tunai bagi setiap sijil (RM)",
-    assumptionsNote: "Anggaran mengandaikan kadar tetap, kelayakan dividen tahun pertama penuh, dividen hujung tahun dan ansuran bulanan. Zakat, cukai dan caj penyelesaian tidak termasuk. Pengiraan ASNB dan terma bank sebenar mungkin berbeza.",
+    dividendField: "Dividen tahunan",
+    dividendFieldContext: "dibayar pada hujung tahun",
+    dividendReinvest: "Pelabur semula",
+    dividendOffset: "Bayar pembiayaan",
+    dividendFieldNote: "Dividen akan bercampur di dalam unit ASB melainkan anda menggunakannya untuk bayaran pembiayaan.",
+    offsetShare: "Bahagian dividen untuk bayaran balik",
+    offsetShareContext: "selebihnya terus berkembang di dalam unit",
+    assumptionsNote: "Anggaran mengandaikan kadar tetap, kelayakan dividen tahun pertama penuh, dividen hujung tahun dan ansuran bulanan. Dividen yang diperuntukkan untuk pembiayaan akan digunakan untuk servicing ansuran bulanan tahun berikutnya dan tidak dilabur semula, jadi tahun pertama dibayar sepenuhnya daripada tunai sendiri, pembiayaan mengekalkan tempoh asal, dan anda hanya membayar bakiya pada tahun-tahun berikutnya. Dividen yang tidak dapat ditampung oleh ansuran kekal dilabur di dalam unit. Zakat, cukai dan caj penyelesaian tidak termasuk. Pengiraan ASNB dan terma bank sebenar mungkin berbeza.",
     projection: "Unjuran",
     monthlyPayment: "Ansuran pembiayaan bulanan",
     perMonth: "/ bulan",
+    perYear: "/ tahun",
     acrossCertificates: "Jumlah ansuran untuk",
+    dividendsApplied: "Dividen ditolak pada pinjaman",
+    dividendsAppliedNote: "Melayan ansuran, tempoh kekal",
+    topUp: "Anda masih bayar",
     netWealth: "Kekayaan bersih ASBF",
     netWealthNote: "Baki ASB ditolak baki pembiayaan",
     ordinaryAsb: "ASB biasa",
@@ -209,6 +246,8 @@ const translations: Record<Language, Copy> = {
     irr: "IRR tahunan berwajaran wang",
     remainingLoan: "Baki pembiayaan",
     returnNote: "*CAGR menganggap jumlah caruman dilaburkan pada permulaan. IRR mengambil kira masa ansuran bulanan dan biasanya lebih bermakna sebagai angka tahunan. Bagi tempoh awal, kekayaan bersih mengandaikan baki model diselesaikan; caj penyelesaian tidak termasuk.",
+    dividendAppliedYear: "Dividen ditolak",
+    appliedByThen: "Dividen ditolak setakat itu",
     chartTitle: "Kekayaan mengikut masa",
     chartDescription: "Anggaran kekayaan bersih pada akhir setiap tahun.",
     selectedYear: "Tahun dipilih",
@@ -242,6 +281,8 @@ const initialInputs: CalculatorInputs = {
   asbReturn: 5.25,
   tenure: 30,
   fees: 500,
+  dividendMode: "reinvest",
+  dividendOffsetShare: 100,
 };
 
 function readPreference<T extends string>(key: string, fallback: T, choices: T[]): T {
@@ -408,6 +449,8 @@ function exportProjection(points: ProjectionPoint[]) {
     "Year",
     "ASB balance",
     "Remaining financing",
+    "Dividend applied to financing",
+    "Cumulative dividends applied",
     "ASBF net wealth",
     "Ordinary ASB balance",
     "Total cash invested",
@@ -422,6 +465,8 @@ function exportProjection(points: ProjectionPoint[]) {
     point.year,
     point.asbBalance.toFixed(2),
     point.loanBalance.toFixed(2),
+    point.dividendApplied.toFixed(2),
+    point.dividendsApplied.toFixed(2),
     point.asbfWealth.toFixed(2),
     point.ordinaryWealth.toFixed(2),
     point.cashInvested.toFixed(2),
@@ -456,6 +501,7 @@ function App() {
   const scenarioYear = Math.min(terminationYear, inputs.tenure);
   const scenario = results.projection[scenarioYear] ?? selected;
   const advantage = selected.asbfWealth - selected.ordinaryWealth;
+  const offsetEnabled = inputs.dividendMode === "offset";
   const visibleYears = showAllYears
     ? results.projection.slice(1)
     : results.projection.slice(1, Math.min(inputs.tenure, 5) + 1);
@@ -691,6 +737,46 @@ function App() {
               </div>
               <span id="fee-note" className="field-context">{text.perCertificateFees}</span>
             </div>
+
+            <div className="form-field dividend-field">
+              <div className="field-heading">
+                <span id="dividend-mode-label">{text.dividendField}</span>
+                <span className="field-context">{text.dividendFieldContext}</span>
+              </div>
+              <div className="segmented-control" role="group" aria-labelledby="dividend-mode-label">
+                <button
+                  type="button"
+                  aria-pressed={inputs.dividendMode === "reinvest"}
+                  onClick={() => updateInput("dividendMode", "reinvest")}
+                >{text.dividendReinvest}</button>
+                <button
+                  type="button"
+                  aria-pressed={inputs.dividendMode === "offset"}
+                  onClick={() => updateInput("dividendMode", "offset")}
+                >{text.dividendOffset}</button>
+              </div>
+              <span className="field-context">{text.dividendFieldNote}</span>
+              {inputs.dividendMode === "offset" && (
+                <div className="range-field">
+                  <div className="field-heading">
+                    <label htmlFor="offset-share">{text.offsetShare}</label>
+                    <output htmlFor="offset-share">{inputs.dividendOffsetShare}%</output>
+                  </div>
+                  <input
+                    id="offset-share"
+                    className="range-input"
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={5}
+                    value={inputs.dividendOffsetShare}
+                    onChange={(event) => updateInput("dividendOffsetShare", Number(event.currentTarget.value))}
+                  />
+                  <div className="range-limits"><span>0%</span><span>100%</span></div>
+                  <span className="field-context">{text.offsetShareContext}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           <p className="assumption-note"><span className="note-marker" aria-hidden="true">i</span>{text.assumptionsNote}</p>
@@ -712,6 +798,12 @@ function App() {
             <div className="monthly-copy">
               <span className="metric-label">{text.monthlyPayment}</span>
               <p>{text.acrossCertificates} {inputs.certificates} {inputs.certificates === 1 ? text.certificate : text.certificates}</p>
+              {offsetEnabled && (
+                <p className="monthly-offset">{text.dividendsApplied}: {formatMoney(selected.dividendApplied)} {text.perYear}</p>
+              )}
+              {offsetEnabled && (
+                <p className="monthly-offset">{text.topUp}: {formatMoney(selected.monthlyTopUp)} {text.perMonth}</p>
+              )}
             </div>
             <div className="payment-value"><strong>{formatMoney(results.monthlyPayment)}</strong><span>{text.perMonth}</span></div>
           </article>
@@ -757,6 +849,9 @@ function App() {
                   <tr><th scope="row">{text.totalRoi}</th><td>{formatPercent(selected.asbfRoi, language)}</td><td>{formatPercent(selected.ordinaryRoi, language)}</td></tr>
                   <tr><th scope="row">{text.cagr}</th><td>{formatPercent(selected.asbfCagr, language)}</td><td>{formatPercent(selected.ordinaryCagr, language)}</td></tr>
                   <tr><th scope="row">{text.irr}</th><td>{formatPercent(selected.asbfIrr, language)}</td><td>{formatPercent(selected.ordinaryIrr, language)}</td></tr>
+                  {offsetEnabled && (
+                    <tr><th scope="row">{text.dividendsApplied}</th><td>{formatMoney(selected.dividendsApplied)}</td><td>{formatMoney(0)}</td></tr>
+                  )}
                   <tr><th scope="row">{text.remainingLoan}</th><td>{formatMoney(selected.loanBalance)}</td><td>{formatMoney(0)}</td></tr>
                 </tbody>
               </table>
@@ -802,6 +897,7 @@ function App() {
                     <th scope="col">{text.year}</th>
                     <th scope="col">{text.asbBalance}</th>
                     <th scope="col">{text.remainingLoan}</th>
+                    {offsetEnabled && <th scope="col">{text.dividendAppliedYear}</th>}
                     <th className="asbf-col" scope="col">{text.netWealth}</th>
                     <th className="ordinary-col" scope="col">{text.ordinaryBalance}</th>
                     <th scope="col">{text.cashInvested}</th>
@@ -813,6 +909,7 @@ function App() {
                       <th scope="row">{point.year}</th>
                       <td>{formatMoney(point.asbBalance)}</td>
                       <td>{formatMoney(point.loanBalance)}</td>
+                      {offsetEnabled && <td>{formatMoney(point.dividendApplied)}</td>}
                       <td className={tone(point.asbfWealth)}>{formatMoney(point.asbfWealth)}</td>
                       <td className={tone(point.ordinaryWealth)}>{formatMoney(point.ordinaryWealth)}</td>
                       <td>{formatMoney(point.cashInvested)}</td>
@@ -833,6 +930,7 @@ function App() {
                   <dl className="year-details">
                     <div><dt>{text.asbBalance}</dt><dd>{formatMoney(point.asbBalance)}</dd></div>
                     <div><dt>{text.remainingLoan}</dt><dd>{formatMoney(point.loanBalance)}</dd></div>
+                    {offsetEnabled && <div><dt>{text.dividendAppliedYear}</dt><dd>{formatMoney(point.dividendApplied)}</dd></div>}
                     <div><dt>{text.cashInvested}</dt><dd>{formatMoney(point.cashInvested)}</dd></div>
                   </dl>
                 </details>
@@ -886,6 +984,13 @@ function App() {
               <small>{text.payoutNote}</small>
             </article>
             <article className="scenario-metric"><span>{text.cashInvestedByThen}</span><strong>{formatMoney(scenario.cashInvested)}</strong></article>
+            {offsetEnabled && (
+              <article className="scenario-metric">
+                <span>{text.appliedByThen}</span>
+                <strong>{formatMoney(scenario.dividendsApplied)}</strong>
+                <small>{text.dividendsAppliedNote}</small>
+              </article>
+            )}
             <article className="scenario-metric"><span>{text.profitLoss}</span><strong className={tone(terminationProfit)}>{formatMoney(terminationProfit)}</strong></article>
             <article className="scenario-metric"><span>{text.totalReturn}</span><strong>{formatPercent(scenario.asbfRoi, language)}</strong></article>
             <article className="scenario-metric"><span>{text.irr}</span><strong>{formatPercent(scenario.asbfIrr, language)}</strong></article>

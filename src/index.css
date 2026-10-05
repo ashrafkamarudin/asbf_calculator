@@ -552,6 +552,72 @@ summary:focus-visible {
   margin-top: -3px;
 }
 
+.dividend-field {
+  gap: 9px;
+  padding: 13px;
+  border: 1px solid var(--field-border);
+  border-radius: 12px;
+  background: var(--field);
+}
+
+.segmented-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--panel) 70%, var(--field));
+}
+
+.segmented-control button {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.25;
+  text-align: center;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
+}
+
+.segmented-control button:hover {
+  color: var(--text-strong);
+}
+
+.segmented-control button[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-soft);
+  color: var(--text-strong);
+}
+
+.segmented-control button[aria-pressed="true"]::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.dividend-field .range-field {
+  margin-top: 2px;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+
+.monthly-copy .monthly-offset {
+  color: var(--accent);
+}
+
 .assumption-note {
   display: flex;
   align-items: flex-start;
@@ -1182,7 +1248,7 @@ summary:focus-visible {
   font-size: 29px;
 }
 
-.scenario-featured small {
+.scenario-metric small {
   color: var(--muted);
   font-size: 10px;
   line-height: 1.45;
@@ -1495,6 +1561,25 @@ summary:focus-visible {
     font-size: 16px;
   }
 
+  .dividend-field {
+    gap: 8px;
+    padding: 11px;
+  }
+
+  .segmented-control button {
+    min-height: 42px;
+    font-size: 11px;
+  }
+
+  .dividend-field .range-field {
+    margin-top: 0;
+    padding-top: 10px;
+  }
+
+  .dividend-field .range-field .field-heading label {
+    max-width: none;
+  }
+
   .assumption-note {
     gap: 8px;
     margin-top: 16px;
@@ -1548,6 +1633,10 @@ summary:focus-visible {
   .monthly-copy p {
     margin-top: 4px;
     font-size: 9px;
+  }
+
+  .monthly-copy p + p {
+    margin-top: 2px;
   }
 
   .payment-value {
@@ -1937,7 +2026,7 @@ summary:focus-visible {
     font-size: 25px;
   }
 
-  .scenario-featured small,
+  .scenario-metric small,
   .dialog-note {
     font-size: 9px;
   }
