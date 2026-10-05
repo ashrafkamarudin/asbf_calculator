@@ -1,6 +1,7 @@
 export type DividendMode = "reinvest" | "offset";
 
 export type CalculatorInputs = {
+  existingCapital: number;
   amount: number;
   certificates: number;
   financingRate: number;
@@ -103,6 +104,9 @@ function compoundAnnualized(value: number, cashInvested: number, years: number) 
 export function calculateProjection(inputs: CalculatorInputs): CalculatorResults {
   const principal = inputs.amount * inputs.certificates;
   const upfrontFees = inputs.fees * inputs.certificates;
+  // Optional capital the user already holds. It is not financed, so it only seeds both
+  // strategies and never touches the loan, which stays sized on the certificates alone.
+  const startingCapital = Math.max(0, inputs.existingCapital);
   const monthlyRate = inputs.financingRate / 1200;
   const annualReturn = inputs.asbReturn / 100;
   const monthsInTerm = inputs.tenure * 12;
@@ -119,11 +123,13 @@ export function calculateProjection(inputs: CalculatorInputs): CalculatorResults
   // its original term rather than being cleared early. The first distribution arrives after
   // year one, so year one is always paid in full, and whatever the instalments cannot absorb
   // stays invested inside the units. A zero offset share reproduces the plain reinvestment path.
-  let asbBalance = principal;
+  // Existing capital rides inside the units from day one, so it earns the return and funds
+  // distributions exactly like the financed units do.
+  let asbBalance = principal + startingCapital;
   let dividendsAppliedToDate = 0;
   let dividendAvailable = 0;
 
-  const asbBalances: number[] = [principal];
+  const asbBalances: number[] = [asbBalance];
   const dividendAppliedByYear: number[] = [0];
   const dividendsAppliedByYear: number[] = [0];
   const cashPaidByYear: number[] = [0];
@@ -147,7 +153,7 @@ export function calculateProjection(inputs: CalculatorInputs): CalculatorResults
   }
 
   const projection: ProjectionPoint[] = [];
-  let ordinaryBalance = upfrontFees;
+  let ordinaryBalance = upfrontFees + startingCapital;
   let cashPaid = 0;
 
   for (let year = 0; year <= inputs.tenure; year += 1) {

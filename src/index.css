@@ -548,7 +548,8 @@ summary:focus-visible {
   appearance: textfield;
 }
 
-.fees-field .field-context {
+.fees-field .field-context,
+.capital-field .field-context {
   margin-top: -3px;
 }
 
@@ -1125,9 +1126,16 @@ summary:focus-visible {
 }
 
 .termination-dialog {
+  /* The UA sheet centres dialogs with margin: auto, but Tailwind's preflight resets
+     margin to 0 on every element. Pinning a fixed box across the viewport and restoring
+     the auto margins centres the sheet on desktop and laptop without touching the
+     mobile bottom-sheet override further down. */
+  position: fixed;
+  inset: 0;
   width: min(610px, calc(100% - 32px));
   max-width: 610px;
   max-height: min(90dvh, 820px);
+  margin: auto;
   overflow: auto;
   padding: 0;
   border: 1px solid var(--panel-border);

@@ -20,6 +20,8 @@ type Copy = {
   projectionKicker: string;
   assumptions: string;
   assumptionIntro: string;
+  existingCapital: string;
+  existingCapitalContext: string;
   certificateAmount: string;
   perCertificate: string;
   minAmount: string;
@@ -109,6 +111,8 @@ const translations: Record<Language, Copy> = {
     projectionKicker: "PROJECTION",
     assumptions: "Your assumptions",
     assumptionIntro: "Set your financing details to compare both strategies on equal cash outlay.",
+    existingCapital: "Existing capital",
+    existingCapitalContext: "optional — capital you already hold, added to both strategies",
     certificateAmount: "ASB certificate amount",
     perCertificate: "per certificate",
     minAmount: "RM 10,000",
@@ -196,6 +200,8 @@ const translations: Record<Language, Copy> = {
     projectionKicker: "UNJURAN",
     assumptions: "Andaian anda",
     assumptionIntro: "Tetapkan butiran pembiayaan untuk membandingkan kedua-dua strategi dengan aliran tunai yang sama.",
+    existingCapital: "Modal sedia ada",
+    existingCapitalContext: "pilihan — modal yang anda sudah ada, ditambah pada kedua-dua strategi",
     certificateAmount: "Jumlah sijil ASB",
     perCertificate: "setiap sijil",
     minAmount: "RM 10,000",
@@ -275,6 +281,7 @@ const translations: Record<Language, Copy> = {
 };
 
 const initialInputs: CalculatorInputs = {
+  existingCapital: 0,
   amount: 100_000,
   certificates: 1,
   financingRate: 4.5,
@@ -307,6 +314,11 @@ function formatPercent(value: number | null, language: Language, precision = 1) 
 
 function formatRate(value: number) {
   return `${Number(value.toFixed(2))}%`;
+}
+
+function clampCapital(value: number) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(10_000_000, value));
 }
 
 function compactMoney(value: number) {
@@ -736,6 +748,25 @@ function App() {
                 />
               </div>
               <span id="fee-note" className="field-context">{text.perCertificateFees}</span>
+            </div>
+
+            <div className="form-field capital-field">
+              <label htmlFor="existing-capital">{text.existingCapital}</label>
+              <div className="fee-input-wrap">
+                <span>RM</span>
+                <input
+                  id="existing-capital"
+                  type="number"
+                  min={0}
+                  max={10_000_000}
+                  step={1_000}
+                  inputMode="numeric"
+                  value={inputs.existingCapital}
+                  onChange={(event) => updateInput("existingCapital", clampCapital(Number(event.currentTarget.value)))}
+                  aria-describedby="capital-note"
+                />
+              </div>
+              <span id="capital-note" className="field-context">{text.existingCapitalContext}</span>
             </div>
 
             <div className="form-field dividend-field">
